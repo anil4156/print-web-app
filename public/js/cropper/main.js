@@ -72,9 +72,9 @@ $(function () {
     }
 
     // Download
-    if (typeof $download[0].download === 'undefined') {
-        $download.addClass('disabled');
-    }
+    // if (typeof $download[0].download === 'undefined') {
+    //     $download.addClass('disabled');
+    // }
 
     // Options
     $(".image_list").on("click", function () {
