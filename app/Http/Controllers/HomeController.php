@@ -15,16 +15,74 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+//        $json = file_get_contents('php://input');
+//        $data = json_decode($json);
+//        $data = (array) $data;
+//        p($data);
         $data = [
-            'order_id' => '1',
-            'order_number' => "B3283160734-002",
-            'order_detail' => "Description: 2 X 3.5 16PT Matte/Dull Finish Round Corner Business Card",
-            'order_thumb' => "test.png",
-            'images' => [asset('images/our-mission.png'), asset('images/our-vision.png'), asset('images/thelogo.png')]
+            'product' => 'Standard Business Card',
+            'quantity' => '1000',
+            'coating' => 'UV Two Sides',
+            'color' => 'Full Color',
+            'turnaround' => '2 Business Days',
+            'orderdate' => '2021-03-18 00:00:00',
+            'jobname1' => 'Test Job',
+            'ordersid' => '183256',
+            'size' => '2 x  3.5',
+            'duedate' => '2021-03-18 00:00:00',
+            'sides' => 'Two Sided',
+            'files' =>
+                [
+                    [
+                        'file' => 'https://magicproofing.com/assets/Aquatic-Back.jpg',
+                        'name' => 'Aquatic-Back.jpg',
+                        'type' => '.jpg',
+                    ],
+                    [
+                        'file' => 'https://magicproofing.com/assets/Aquatic-Front.jpg',
+                        'name' => 'Aquatic-Front.jpg',
+                        'type' => '.jpg',
+                    ],
+                    [
+                        'file' => asset('images/images.jpeg'),
+                        'name' => 'images-Front.jpeg',
+                        'type' => '.jpeg',
+                    ],
+                ],
+            'id' => '183256',
+            'invoice' => 'EG12-515454',
+            'category' => 'Business Cards',
+            'stock' => '14PT C2S',
+            'jobname' => 'Test Job',
         ];
-        $client = new Client();
-        $response = $client->post('http://localhost/print-web-app/api/printproof', ['form_params' => $data]);
-        $data = json_decode($response->getBody());
+
+        if (!empty($data) && isset($data['files'])) {
+            if (!empty($data['files'])) {
+                foreach ($data['files'] as $image) {
+                    $isCymk = 1;
+                    $imageParts = explode('-', $image['name']);
+                    if (!empty($imageParts)) {
+                        $imageParts = explode('.', $imageParts[1]);
+                        if (isset($imageParts[0]) && $imageParts[0] == 'Front') {
+                            $image['image_view'] = 'Front';
+                        } elseif ($imageParts[0] && $imageParts[0] == 'Back') {
+                            $image['image_view'] = 'Back';
+                        }
+                    }
+
+                    // check CYMK validation
+                    $size = getimagesize($image['file']);
+                    if (!empty($size)) {
+                        if ($size['channels'] != 4) {
+                            $isCymk = 0;
+                        }
+                    }
+                    $image['isCymk'] = $isCymk;
+                    $data['images'][] = $image;
+                }
+            }
+        }
+
         return view('home')->with('order_detail', $data);
     }
 

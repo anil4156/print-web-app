@@ -2492,22 +2492,22 @@
 
     var methods = {
         // rotate template
-        rotateTemplate: function rotateTemplate() {
+        rotateTemplateLandscape: function rotateTemplate() {
+            templaterotation = 0;
+            // setStyle(this.cropper, assign({
+            //         transform: "rotate(" + templaterotation + "deg) scale(1.21)",
+            //
+            //     })
+            // );
 
-            if (templaterotation == 0) {
-                templaterotation = 90;
-            } else if (templaterotation == 90) {
-                templaterotation = 0;
-            }
-            setStyle(this.cropper, assign({
-                    transform: "rotate(" + templaterotation + "deg)",
-
-                })
-            );
-
-            // $(".cropper-container").css('transform', 'rotate(90deg)');
+            $(".cropper-container").css('transform', 'rotate(' + templaterotation + 'deg)');
+            $(".cropper-container .cropper-wrap-box").css('transform', 'rotate(-' + templaterotation + 'deg)');
         },
-
+        rotateTemplatePotrait: function rotateTemplate() {
+            templaterotation = 90;
+            $(".cropper-container").css('transform', 'rotate(' + templaterotation + 'deg)');
+            $(".cropper-container .cropper-wrap-box").css('transform', 'rotate(-' + templaterotation + 'deg)');
+        },
         // Show the crop box manually
         crop: function crop() {
             if (this.ready && !this.cropped && !this.disabled) {

@@ -17,4 +17,4 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 
-Route::get('/', 'HomeController@index')->name('website.home');
+Route::any('/', 'HomeController@index')->name('website.home');

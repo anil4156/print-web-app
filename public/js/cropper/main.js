@@ -21,6 +21,7 @@ $(function () {
         autoCrop: false,
         dragMode: 'none',
         viewMode: 2,
+        checkCrossOrigin: false,
         // crop: function (e) {
         //     $dataX.val(Math.round(e.detail.x));
         //     $dataY.val(Math.round(e.detail.y));
@@ -31,7 +32,9 @@ $(function () {
         //     $dataScaleY.val(e.detail.scaleY);
         // }
     };
+    console.log($image.is(':empty'));
     var originalImageURL = $image.attr('src');
+    console.log(originalImageURL);
     var uploadedImageName = 'cropped.jpg';
     var uploadedImageType = 'image/jpeg';
     var uploadedImageURL;
@@ -77,9 +80,6 @@ $(function () {
     // }
 
     // Options
-    $(".image_list").on("click", function () {
-        $image.cropper('destroy').attr('src', $(this).prop('src')).cropper(options);
-    });
     $('.docs-toggles').on('change', 'input', function () {
         var $this = $(this);
         var name = $this.attr('name');

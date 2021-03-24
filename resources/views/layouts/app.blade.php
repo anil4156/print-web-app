@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/cropper/cropper.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
 </head>
@@ -25,6 +26,8 @@
 <script src="{{ asset('js/cropper/cropper.js') }}"></script>
 <script src="{{ asset('js/cropper/main.js') }}"></script>
 <script src="{{ asset('js/cropper/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('js/gsap.min.js') }}"></script>
+<script src="{{ asset('js/jquery-ui.min.js')}}"></script>
 @yield('footer_scripts')
 </body>
 </html>
