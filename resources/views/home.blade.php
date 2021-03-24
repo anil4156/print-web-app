@@ -190,7 +190,7 @@
                             </span>
                         </button>
                         <button type="button" class="btn btn-primary" id="undoButton" data-method="undo"
-                                title="Undo">
+                                title="Undo" disabled="true">
                             <span class="docs-tooltip" data-toggle="tooltip" data-animation="false"
                                   title="Undo"
                                   data-original-title="$().cropper(&quot;undo&quot;)">
@@ -198,7 +198,7 @@
                             </span>
                         </button>
                         <button type="button" class="btn btn-primary" id="redoButton" data-method="redo"
-                                title="Redo">
+                                title="Redo" disabled="true">
                             <span class="docs-tooltip" data-toggle="tooltip" data-animation="false"
                                   title="Redo"
                                   data-original-title="$().cropper(&quot;redo&quot;)">
@@ -242,7 +242,7 @@
                     <h3 class="colheader">Preview Area</h3>
                     <div class="img-container image-list-div previewthumbs">
                         @if(isset($order_detail['images']) && !empty($order_detail['images']))
-                            @foreach($order_detail['images'] as $image)
+                            @foreach($order_detail['images'] as $key => $image)
                                 <div class="thumbItem">
                                     <div class="image-view">
                                         <h6>{{$image['image_view']}}</h6>
@@ -250,7 +250,7 @@
                                     <img
                                         class="image_list img-responsive {{$image['image_view'] == "Front" ? 'front_image' : 'back_image'}}"
                                         src="{{$image['file']}}" data-cymk="{{$image['isCymk']}}"
-                                        data-image_view="{{$image['image_view']}}">
+                                        data-image_view="{{$image['image_view']}}" data-id="image_{{$key}}">
                                 </div>
                             @endforeach
                         @endif
@@ -259,7 +259,7 @@
                 <div class="col-md-9 preview-area">
                     <div class="img-container canvasImage" id="canvasImageDiv">
                         @if(isset($order_detail['images']) && !empty($order_detail['images']))
-                            <img id="image232" src="{{$order_detail['images'][0]['file']}}" class="">
+                            <img id="image" src="{{$order_detail['images'][0]['file']}}" class="">
                         @endif
                     </div>
                     <div id="cymkErrorDiv" style="display: none;">
@@ -321,8 +321,6 @@
                         <p>vertical</p>
                         <div id="vertical-slider"></div>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -331,6 +329,7 @@
 @section('footer_scripts')
     <script type="text/javascript">
         $(document).ready(function () {
+            localStorage.clear();
             $('#3D_preview').click(function () {
                 $(".cardWrapper .front img").prop('src', $(".image-list-div .front_image").prop('src'))
                 $(".cardWrapper .back img").prop('src', $(".image-list-div .back_image").prop('src'))
@@ -338,15 +337,48 @@
             });
 
             // reintialize cropper for each image change
+            var imageID = $('.image_list').first().data('id');
+
             $(".image_list").on("click", function () {
+
+                // change item view in header
                 $('#item-view-value').text($(this).data('image_view'));
+
+                // reinitialize cropper
                 if ($(this).data('cymk') == 1) {
+                    // save image data to local storage
+
+                    var imageData = {
+                        data: $('#image').cropper('getData'),
+                        canvasData: $('#image').cropper('getCanvasData'),
+                        cropBoxData: $('#image').cropper('getCropBoxData'),
+                    };
+
+                    localStorage.setItem(imageID, JSON.stringify(imageData));
+                    imageID = $(this).data('id');
+                    // options
+                    var cropperImageData = localStorage.getItem($(this).data('id'));
+                    var optionData = null;
+                    var canvasData = null;
+                    var cropBoxData = null;
+                    if (cropperImageData != null) {
+                        cropperImageData = JSON.parse(cropperImageData);
+                        optionData = cropperImageData.data;
+                        canvasData = cropperImageData.canvasData;
+                        cropBoxData = cropperImageData.cropBoxData;
+                    }
                     var options = {
                         preview: '.img-preview',
                         autoCrop: false,
                         dragMode: 'none',
                         viewMode: 2,
                         checkCrossOrigin: false,
+                        data: optionData,
+                        ready: function () {
+                            $('#image').cropper("setCanvasData", canvasData);
+                            $('#image').cropper("setCropBoxData", cropBoxData);
+                            $('#image').cropper("resetUndoRedoBuffer");
+                        },
                     };
                     $('#canvasImageDiv').show();
                     $('#cymkErrorDiv').hide();
@@ -355,7 +387,6 @@
                     $('#canvasImageDiv').hide();
                     $('#cymkErrorDiv').show();
                 }
-
             });
         });
         $(function () {
@@ -422,7 +453,6 @@
                 }
             });
         });
-
     </script>
 @endsection
 

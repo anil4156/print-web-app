@@ -32,9 +32,7 @@ $(function () {
         //     $dataScaleY.val(e.detail.scaleY);
         // }
     };
-    console.log($image.is(':empty'));
     var originalImageURL = $image.attr('src');
-    console.log(originalImageURL);
     var uploadedImageName = 'cropped.jpg';
     var uploadedImageType = 'image/jpeg';
     var uploadedImageURL;
@@ -202,6 +200,7 @@ $(function () {
                     console.log(e.message);
                 }
             }
+            $image.cropper('enableDisableUndoRedo');
         }
     });
 

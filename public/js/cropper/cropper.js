@@ -2564,8 +2564,24 @@
         ,
         redo: function redo() {
             this.loadImage(redoBuffer, 0);
-        }
-        ,
+        },
+        resetUndoRedoBuffer: function resetUndoRedoBuffer() {
+            undoBuffer = [];
+            redoBuffer = [];
+            this.enableDisableUndoRedo();
+        },
+        enableDisableUndoRedo: function enableDisableUndoRedo() {
+            if (undoBuffer.length == 0) {
+                $('#undoButton').prop('disabled', true);
+            } else {
+                $('#undoButton').prop('disabled', false);
+            }
+            if (redoBuffer.length == 0) {
+                $('#redoButton').prop('disabled', true);
+            } else {
+                $('#redoButton').prop('disabled', false);
+            }
+        },
 
         // load image for undo/redo
         loadImage: function loadImage(from, isundo) {
@@ -2595,8 +2611,7 @@
                 return false;
             }
             return this;
-        }
-        ,
+        },
         // Clear the crop box
         clear: function clear() {
             if (this.cropped && !this.disabled) {

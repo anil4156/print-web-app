@@ -34,12 +34,12 @@ class HomeController extends Controller
             'files' =>
                 [
                     [
-                        'file' => 'https://magicproofing.com/assets/Aquatic-Back.jpg',
+                        'file' => asset('images/Aquatic-Back.jpg'),
                         'name' => 'Aquatic-Back.jpg',
                         'type' => '.jpg',
                     ],
                     [
-                        'file' => 'https://magicproofing.com/assets/Aquatic-Front.jpg',
+                        'file' => asset('images/Aquatic-Front.jpg'),
                         'name' => 'Aquatic-Front.jpg',
                         'type' => '.jpg',
                     ],
