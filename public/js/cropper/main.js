@@ -5,6 +5,7 @@ $(function () {
         log: function () {
         }
     };
+    var localStorageArr = [];
     var URL = window.URL || window.webkitURL;
     var $image = $('#image');
     var $download = $('#download');
@@ -16,7 +17,6 @@ $(function () {
     var $dataScaleX = $('#dataScaleX');
     var $dataScaleY = $('#dataScaleY');
     var options = {
-        // aspectRatio: 16 / 9,
         preview: '.img-preview',
         autoCrop: false,
         dragMode: 'none',
@@ -113,6 +113,7 @@ $(function () {
         var cropped;
         var $target;
         var result;
+        var imageID = $image.data('id');
 
         if ($this.prop('disabled') || $this.hasClass('disabled')) {
             return;
@@ -201,8 +202,57 @@ $(function () {
                 }
             }
             $image.cropper('enableDisableUndoRedo');
+
+            // save image data to local storage
+            saveLocalStorage(imageID, false);
         }
     });
+
+    // ok to print
+    $('#ok_to_print').click(function (e) {
+        var imageId = $image.data('id');
+        $('#active_' + imageId).removeClass('active-image');
+        $('#active_' + imageId).addClass('thumb-checkmark-img');
+        // $('#image-list-' + imageIdArr[1]).next().trigger('click');
+        saveLocalStorage(imageId, true);
+
+        var images = JSON.parse(localStorage.getItem('images'));
+        if (Object.keys(images).length == $(".image-list-div .cymk_images").length) {
+            var displayPreviewAlert = true;
+            for (var k in images) {
+                var image = images[k];
+                if (image.okToPrint == false) {
+                    displayPreviewAlert = false;
+                    break;
+                }
+            }
+            if (displayPreviewAlert == true) {
+                $('#confirm_orientation').dialog('open');
+            }
+        }
+
+    });
+
+    function saveLocalStorage(imageID, okToPrint = false) {
+        if (okToPrint == false) {
+            $('#active_' + imageID).removeClass('thumb-checkmark-img');
+            $('#active_' + imageID).addClass('active-image');
+        }
+
+        var imageData = {
+            [imageID]: {
+                data: $image.cropper('getData'),
+                canvasData: $image.cropper('getCanvasData'),
+                cropBoxData: $image.cropper('getCropBoxData'),
+                canvasImageData: $image.cropper("getCroppedCanvas", '{"maxWidth": 300, "maxHeight": 300}').toDataURL("image/png"),
+                disableImage: $image.data('cropper').disabled,
+                okToPrint: okToPrint,
+            }
+        };
+        Object.assign(localStorageArr, JSON.parse(localStorage.getItem('images')));
+        Object.assign(localStorageArr, imageData);
+        localStorage.setItem('images', JSON.stringify(Object.assign({}, localStorageArr)));
+    }
 
     // Keyboard
     $(document.body).on('keydown', function (e) {

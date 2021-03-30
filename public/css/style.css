@@ -36,6 +36,14 @@
     border: 1px solid #ccc;
 }
 
+.active-image {
+    display: none;
+}
+
+.thumb-checkmark-img {
+    display: block;
+}
+
 .cardWrapper {
     width: 200px;
     height: 200px;
