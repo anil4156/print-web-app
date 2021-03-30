@@ -292,9 +292,6 @@
             </div>
         </div>
     </div>
-Please find today's Hours log (30th March 2021)
---------------------------------
-- Worked on "ok to print" and "proceed to finish" button, fixed issue of timer
 @endsection
 @section('footer_scripts')
     <script type="text/javascript">
