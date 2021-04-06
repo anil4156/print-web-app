@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="wrapper p-3">
+    <div class="home-main">
         <div class="order-detail">
             <div class="row">
                 <div class="col-md-3">
@@ -100,11 +100,11 @@
                     <!-- Scale -->
                     <div class="btn-group">
                         <span class="tool-name">Scale: </span>
-                        <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.5"
+                        <button type="button" class="btn btn-primary" data-method="zoomScale" data-option="0.2" data-method2="Scale"
                                 title="Scale Up">
                             <span class="fas fa-caret-up"></span><i class=""></i>
                         </button>
-                        <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.5"
+                        <button type="button" class="btn btn-primary" data-method="zoomScale" data-option="-0.2" data-method2="Scale"
                                 title="Scale Down">
                             <span class="fas fa-caret-down"></span>
                         </button>
@@ -190,7 +190,7 @@
         </div>
         <div class="preview-and-image-area">
             <div class="row">
-                <div class="col-md-3 preview-area">
+                <div class="col-md-2 preview-area-left">
                     <h3 class="colheader">Preview Area</h3>
                     <div class="img-container image-list-div previewthumbs">
                         @if(isset($order_detail['images']) && !empty($order_detail['images']))
@@ -208,16 +208,19 @@
                                         src="{{$image['file']}}" data-id="{{$key}}">
 
                                     <span class="fas fa-check active-image" id="active_image_{{$key}}"></span>
+                                    <span class="fa fa-times active-image" id="xmark_image_{{$key}}"></span>
                                 </div>
                             @endforeach
                         @endif
                     </div>
                 </div>
-                <div class="col-md-9 preview-area">
+                <div class="col-md-10 preview-area-right">
                     <div class="img-container canvasImage" id="canvasImageDiv">
+                        <div class="boxes-holder">
                         @if(isset($order_detail['images']) && !empty($order_detail['images']))
                             <img id="image" src="{{$order_detail['images'][0]['file']}}" class="">
                         @endif
+                        </div>
                     </div>
                     <div id="cymkErrorDiv" style="display: none;">
                         <p>Image is not CYMK.</p>
@@ -232,6 +235,16 @@
         </div>
         <div id="proceed_to_finish_dialog">
             Please approve all sides by clicking the green "OK to Print" button.
+        </div>
+        <div id="ready-to-print-modal">
+            <h5>Click OK below if your file(s) have been proofed and are ready to print.</h5>
+            <!-- <ul>
+                <li>Rotation is correct</li>
+                <li>Adequate bleed is included</li>
+                <li>Fonts &amp; Text is correct</li>
+                <li>Images are present &amp; layered correctly</li>
+            </ul>
+            <h5>If the job is production ready, click the "Send to Production" button below.</h5> -->
         </div>
     </div>
     <!-- The 3D Preview Modal -->
@@ -335,6 +348,7 @@
                     var cropBoxData = null;
                     var disableImage = false;
                     var okToPrint = false;
+                    var needToReplace = false;
                     var imageData = JSON.parse(localStorage.getItem('images'));
                     if (imageData != null) {
                         var cropperImageData = imageData['image_' + imageID];
@@ -345,16 +359,23 @@
                             cropBoxData = cropperImageData.cropBoxData;
                             disableImage = cropperImageData.disableImage;
                             okToPrint = cropperImageData.okToPrint;
+                            needToReplace = cropperImageData.needToReplace;
                         }
                     }
                     // options
                     var options = {
                         preview: '.img-preview',
-                        autoCrop: false,
-                        dragMode: 'none',
-                        viewMode: 2,
-                        checkCrossOrigin: false,
-                        zoomOnWheel: false,
+                            //aspectRatio: 16 / 9,
+                            dragMode: 'move',
+                            cropBoxMovable: false,
+                            cropBoxResizable: false,
+                            minCropBoxWidth: 680,
+                            minCropBoxHeight: 400,
+                        // autoCrop: false,
+                        // dragMode: 'none',
+                        // viewMode: 2,
+                        // checkCrossOrigin: false,
+                        // zoomOnWheel: false,
                         data: optionData,
                         ready: function () {
                             $('#image').cropper("setCanvasData", canvasData);
@@ -370,6 +391,11 @@
                             if (okToPrint == true) {
                                 $('#active_image_' + imageID).removeClass('active-image');
                                 $('#active_image_' + imageID).addClass('thumb-checkmark-img');
+                                // $('#image-list-' + imageID).next().trigger('click');
+                            }
+                            if (needToReplace == true) {
+                                $('#xmark_image_' + imageID).removeClass('active-image');
+                                $('#xmark_image_' + imageID).addClass('thumb-checkmark-img');
                                 // $('#image-list-' + imageID).next().trigger('click');
                             }
                         },
@@ -395,6 +421,10 @@
                     if (image.okToPrint == true) {
                         $('#active_image_' + keyArray[1]).removeClass('active-image');
                         $('#active_image_' + keyArray[1]).addClass('thumb-checkmark-img');
+                    }
+                    if (image.needToReplace == true) {
+                        $('#xmark_image_' + keyArray[1]).removeClass('active-image');
+                        $('#xmark_image_' + keyArray[1]).addClass('thumb-checkmark-img');
                     }
                 }
             }
@@ -435,6 +465,31 @@
                 }
             });
 
+            // ready to print modal popup
+            $('#ready-to-print-modal').dialog({
+                title: "Dear Customer:",
+                resizable: false,
+                autoOpen: false,
+                height: "auto",
+                width: 400,
+                modal: true,
+                draggable: false,
+                close: function( event, ui ) {
+                    localStorage.removeItem('countDownDate');
+                    localStorage.removeItem('minuteCount');
+                    localStorage.removeItem('secondCount');
+                    location.reload();
+                   },
+                position: {my: 'top', at: 'top+150'},
+                buttons: {
+                    "OK": function () {
+                        //$(this).dialog("close");
+                        //$('#3D_preview').trigger('click');
+
+                    }
+                }
+            });
+
             //proceed_to_finish
             $('#proceed_to_finish').click(function () {
 
@@ -450,7 +505,11 @@
                             }
                         }
                         if (displayPreviewAlert == true) {
-                            $('#confirm_orientation').dialog('open');
+                            if($("#checkbox_3d").prop('checked') == true){
+                                $('#ready-to-print-modal').dialog('open');
+                            }else{
+                                $('#confirm_orientation').dialog('open');
+                            }
                         } else {
                             $('#proceed_to_finish_dialog').dialog('open');
                         }
@@ -461,7 +520,7 @@
             });
 
             // display 30 min counter
-            var minute = parseInt(50);
+            var minute = parseInt(30);
             if (localStorage.getItem('countDownDate') == null) {
                 var countDownDate = new Date();
                 countDownDate = countDownDate.setMinutes(countDownDate.getMinutes() + minute);

@@ -185,6 +185,8 @@
     var undoBuffer = [];
     var redoBuffer = [];
     var templaterotation = 0;
+    var zoomMax = 0;
+    var zoomMin = 0;
 
     var DEFAULTS = {
         // Define the view mode of the cropper
@@ -256,7 +258,7 @@
         cropmove: null,
         cropend: null,
         crop: null,
-        zoom: null
+        zoom: null,
     };
 
     var TEMPLATE = '<div class="cropper-container" touch-action="none">' + '<div class="cropper-wrap-box">' + '<div class="cropper-canvas"></div>' + '</div>' + '<div class="cropper-drag-box"></div>' + '<div class="cropper-crop-box">' + '<span class="cropper-view-box"></span>' + '<span class="cropper-dashed dashed-h"></span>' + '<span class="cropper-dashed dashed-v"></span>' + '<span class="cropper-center"></span>' + '<span class="cropper-face"></span>' + '<span class="cropper-line line-e" data-cropper-action="e"></span>' + '<span class="cropper-line line-n" data-cropper-action="n"></span>' + '<span class="cropper-line line-w" data-cropper-action="w"></span>' + '<span class="cropper-line line-s" data-cropper-action="s"></span>' + '<span class="cropper-point point-e" data-cropper-action="e"></span>' + '<span class="cropper-point point-n" data-cropper-action="n"></span>' + '<span class="cropper-point point-w" data-cropper-action="w"></span>' + '<span class="cropper-point point-s" data-cropper-action="s"></span>' + '<span class="cropper-point point-ne" data-cropper-action="ne"></span>' + '<span class="cropper-point point-nw" data-cropper-action="nw"></span>' + '<span class="cropper-point point-sw" data-cropper-action="sw"></span>' + '<span class="cropper-point point-se" data-cropper-action="se"></span>' + '</div>' + '</div>';
@@ -2491,6 +2493,43 @@
     };
 
     var methods = {
+
+        zoomScale: function zoomScale(ratio, _originalEvent) {
+            var canvasData = this.canvasData;
+            ratio = Number(ratio);
+
+            var canvasData = this.getCanvasData();
+            var zoomRatio = canvasData.width / canvasData.naturalWidth;
+
+            // if (ratio == 0.2 && zoomRatio < 0.80) 
+            // {
+            if (ratio == 0.2 && zoomMax < 1) 
+            {
+                if (ratio < 0) {
+                    zoomMax--;
+                    ratio = 1 / (1 - ratio);
+                } else {
+                    zoomMax++;
+                    ratio = 1 + ratio;
+                }
+                zoomMin++;
+                return this.zoomTo(canvasData.width * ratio / canvasData.naturalWidth, null, _originalEvent);
+            }
+            //if (ratio == -0.2 && zoomRatio > 0.50) 
+            if (ratio == -0.2 && zoomMin > -1) 
+            {
+                if (ratio < 0) {
+                    zoomMin--;
+                    ratio = 1 / (1 - ratio);
+                } else {
+                    zoomMin++;
+                    ratio = 1 + ratio;
+                }
+                zoomMax--;
+                return this.zoomTo(canvasData.width * ratio / canvasData.naturalWidth, null, _originalEvent);
+            }
+        }
+        ,
         // rotate template
         rotateTemplateLandscape: function rotateTemplate() {
             templaterotation = 0;
@@ -2501,12 +2540,12 @@
             // );
 
             $(".cropper-container").css('transform', 'rotate(' + templaterotation + 'deg)');
-            $(".cropper-container .cropper-wrap-box").css('transform', 'rotate(-' + templaterotation + 'deg)');
+            //$(".cropper-container .cropper-wrap-box").css('transform', 'rotate(-' + templaterotation + 'deg)');
         },
         rotateTemplatePotrait: function rotateTemplate() {
             templaterotation = 90;
             $(".cropper-container").css('transform', 'rotate(' + templaterotation + 'deg)');
-            $(".cropper-container .cropper-wrap-box").css('transform', 'rotate(-' + templaterotation + 'deg)');
+            //$(".cropper-container .cropper-wrap-box").css('transform', 'rotate(-' + templaterotation + 'deg)');
         },
         // Show the crop box manually
         crop: function crop() {

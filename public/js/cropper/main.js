@@ -58,6 +58,13 @@ $(function () {
             console.log(e.type);
         },
         zoom: function (e) {
+            //console.log("**********",e);
+            // if (e.detail.ratio > 1) {
+            //     //alert('hi');
+            //   e.preventDefault();
+            //   $(this).cropper('zoomTo', 1);
+            // }
+            //zoomMax = e.detail.ratio;
             console.log(e.type, e.detail.ratio);
         }
     }).cropper(options);
@@ -214,7 +221,9 @@ $(function () {
         $('#active_' + imageId).removeClass('active-image');
         $('#active_' + imageId).addClass('thumb-checkmark-img');
         // $('#image-list-' + imageIdArr[1]).next().trigger('click');
-        saveLocalStorage(imageId, true);
+        var okToPrint = true;
+        var needToReplace = false;
+        saveLocalStorage(imageId, okToPrint, needToReplace);
 
         var images = JSON.parse(localStorage.getItem('images'));
         if (Object.keys(images).length == $(".image-list-div .cymk_images").length) {
@@ -227,18 +236,59 @@ $(function () {
                 }
             }
             if (displayPreviewAlert == true) {
-                $('#confirm_orientation').dialog('open');
+                // if($("#checkbox_3d").prop('checked') == true){
+                //     $('#ready-to-print-modal').dialog('open');
+                // }else{
+                //     $('#confirm_orientation').dialog('open');
+                // }
+                $('#ready-to-print-modal').dialog('open');
+                //$('#confirm_orientation').dialog('open');
             }
         }
 
     });
 
-    function saveLocalStorage(imageID, okToPrint = false) {
+    // need to replace
+    $('#need_to_replace').click(function (e) {
+        var imageId = $image.data('id');
+        $('#xmark_' + imageId).removeClass('active-image');
+        $('#xmark_' + imageId).addClass('thumb-checkmark-img');
+        // $('#image-list-' + imageIdArr[1]).next().trigger('click');
+        var okToPrint = false;
+        var needToReplace = true;
+        saveLocalStorage(imageId, okToPrint, needToReplace);
+
+       /* var images = JSON.parse(localStorage.getItem('images'));
+        if (Object.keys(images).length == $(".image-list-div .cymk_images").length) {
+            var displayPreviewAlert = true;
+            for (var k in images) {
+                var image = images[k];
+                if (image.okToPrint == false) {
+                    displayPreviewAlert = false;
+                    break;
+                }
+            }
+            if (displayPreviewAlert == true) {
+                if($("#checkbox_3d").prop('checked') == true){
+                    $('#ready-to-print-modal').dialog('open');
+                }else{
+                    $('#confirm_orientation').dialog('open');
+                }
+                //$('#confirm_orientation').dialog('open');
+            }
+        }*/
+
+    });
+
+    function saveLocalStorage(imageID, okToPrint = false, needToReplace = false) {
         if (okToPrint == false) {
             $('#active_' + imageID).removeClass('thumb-checkmark-img');
             $('#active_' + imageID).addClass('active-image');
         }
-
+        if (needToReplace == false) {
+            $('#xmark_' + imageID).removeClass('thumb-checkmark-img');
+            $('#xmark_' + imageID).addClass('active-image');
+        }
         var imageData = {
             [imageID]: {
                 data: $image.cropper('getData'),
@@ -247,6 +297,7 @@ $(function () {
                 canvasImageData: $image.cropper("getCroppedCanvas", '{"maxWidth": 300, "maxHeight": 300}').toDataURL("image/png"),
                 disableImage: $image.data('cropper').disabled,
                 okToPrint: okToPrint,
+                needToReplace:needToReplace,
             }
         };
         Object.assign(localStorageArr, JSON.parse(localStorage.getItem('images')));
