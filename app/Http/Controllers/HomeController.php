@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Yii;
-
+use PDF;
 class HomeController extends Controller
 {
     /**
@@ -34,20 +34,20 @@ class HomeController extends Controller
             'files' =>
                 [
                     [
-                        'file' => asset('images/Aquatic-Back.jpg'),
-                        'name' => 'Aquatic-Back.jpg',
-                        'type' => '.jpg',
-                    ],
-                    [
                         'file' => asset('images/Aquatic-Front.jpg'),
                         'name' => 'Aquatic-Front.jpg',
                         'type' => '.jpg',
                     ],
                     [
-                        'file' => asset('images/images.jpeg'),
-                        'name' => 'images-Front.jpeg',
-                        'type' => '.jpeg',
+                        'file' => asset('images/Aquatic-Back.jpg'),
+                        'name' => 'Aquatic-Back.jpg',
+                        'type' => '.jpg',
                     ],
+                    // [
+                    //     'file' => asset('images/images.jpeg'),
+                    //     'name' => 'images-Front.jpeg',
+                    //     'type' => '.jpeg',
+                    // ],
                 ],
             'id' => '183256',
             'invoice' => 'EG12-515454',
@@ -150,5 +150,39 @@ class HomeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    // Generate PDF
+    public function createPDF() {
+      // retreive all records from db
+     // echo "<pre>";  print_r($_POST);die();
+      //$data = array();
+      $datas = $_POST;
+      $newArray = [];
+      foreach($datas as $data){
+        
+        $newArray[$data['previewItem']] =  $data['canvasImageData'];
+
+      }
+      //echo "<pre>";  print_r($newArray);die();
+      // share data to view
+      view()->share('employee',$newArray);
+      $pdf = PDF::loadView('pdf_view', $newArray);
+
+      // download PDF file with download method
+      //return $pdf->download('pdf_file.pdf');
+
+      // $pdf->stream("dompdf_out.pdf", array("Attachment" => false));
+
+      //   exit(0);
+        $path = public_path('pdf');
+        $fileName =  time().'.'. 'pdf' ;
+        $pdf->save($path . '/' . $fileName);
+
+        $filePath = asset('pdf/').'/'.$fileName;
+        //$pdf12 = public_path('pdf/'.$fileName);
+        echo $filePath;
+        die();
+        return response()->download($pdf);
     }
 }

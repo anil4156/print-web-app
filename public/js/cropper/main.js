@@ -18,10 +18,15 @@ $(function () {
     var $dataScaleY = $('#dataScaleY');
     var options = {
         preview: '.img-preview',
-        autoCrop: false,
-        dragMode: 'none',
-        viewMode: 2,
-        checkCrossOrigin: false,
+        dragMode: 'move',
+        cropBoxMovable: false,
+        cropBoxResizable: false,
+        minCropBoxWidth: 680,
+        minCropBoxHeight: 400,
+        // autoCrop: false,
+        // dragMode: 'none',
+        // viewMode: 2,
+        // checkCrossOrigin: false,
         // crop: function (e) {
         //     $dataX.val(Math.round(e.detail.x));
         //     $dataY.val(Math.round(e.detail.y));
@@ -223,7 +228,8 @@ $(function () {
         // $('#image-list-' + imageIdArr[1]).next().trigger('click');
         var okToPrint = true;
         var needToReplace = false;
-        saveLocalStorage(imageId, okToPrint, needToReplace);
+        var item = $('#item-view-value').text();
+        saveLocalStorage(imageId, okToPrint, needToReplace, item);
 
         var images = JSON.parse(localStorage.getItem('images'));
         if (Object.keys(images).length == $(".image-list-div .cymk_images").length) {
@@ -248,15 +254,35 @@ $(function () {
 
     });
 
+     // need_to_replace modal popup
+    $('#need-to-replace-modal').dialog({
+        title: "Need to replace:",
+        resizable: false,
+        autoOpen: false,
+        height: "auto",
+        width: 400,
+        modal: true,
+        draggable: false,
+        close: function( event, ui ) {
+           },
+        position: {my: 'top', at: 'top+150'},
+    });
+    // replace_no
+    $('#replace_no').click(function (e) {
+        $('#need-to-replace-modal').dialog('close');
+        return false;
+    });
     // need to replace
     $('#need_to_replace').click(function (e) {
+
+        
         var imageId = $image.data('id');
         $('#xmark_' + imageId).removeClass('active-image');
         $('#xmark_' + imageId).addClass('thumb-checkmark-img');
-        // $('#image-list-' + imageIdArr[1]).next().trigger('click');
         var okToPrint = false;
         var needToReplace = true;
         saveLocalStorage(imageId, okToPrint, needToReplace);
+        $('#need-to-replace-modal').dialog('open');
 
        /* var images = JSON.parse(localStorage.getItem('images'));
         if (Object.keys(images).length == $(".image-list-div .cymk_images").length) {
@@ -280,7 +306,7 @@ $(function () {
 
     });
 
-    function saveLocalStorage(imageID, okToPrint = false, needToReplace = false) {
+    function saveLocalStorage(imageID, okToPrint = false, needToReplace = false, item = '') {
         if (okToPrint == false) {
             $('#active_' + imageID).removeClass('thumb-checkmark-img');
             $('#active_' + imageID).addClass('active-image');
@@ -298,6 +324,7 @@ $(function () {
                 disableImage: $image.data('cropper').disabled,
                 okToPrint: okToPrint,
                 needToReplace:needToReplace,
+                previewItem:item,
             }
         };
         Object.assign(localStorageArr, JSON.parse(localStorage.getItem('images')));
@@ -334,14 +361,76 @@ $(function () {
         }
     });
 
-    // Import image
+    // replace_yes
+    var $file = $('#file');
+
+    $('#replace_yes').click(function (e) {
+        //$('#need-to-replace-modal').dialog('close');
+        var files = $('#file')[0].files;
+        var file;
+        console.log("-------------",files);
+        var actimageID = $image.data('id');
+        if (files && files.length) {
+            file = files[0];
+
+            $('#xmark_' + actimageID).removeClass('active-image');
+            $('#xmark_' + actimageID).addClass('thumb-checkmark-img');
+            var okToPrint = false;
+            var needToReplace = false;
+            saveLocalStorage(actimageID, okToPrint, needToReplace);
+            if (!$image.data('cropper')) {
+                return;
+            }
+
+            if (/^image\/\w+$/.test(file.type)) {
+                var actimageID = actimageID.replace(/\D/g, "");
+                //alert(res);
+                  const file12 = file;
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      var base64String = reader.result.replace('data:', '').replace(/^.+,/, '');
+                      localStorage.setItem('uploadedImageURL'+actimageID, 'data:image/png;base64,'+base64String);
+                      //document.body.style.background = `url(data:image/png;base64,${base64String})`;
+                    $image.cropper('destroy').attr('src', 'data:image/png;base64,'+base64String).cropper(options);
+                    if (actimageID == '0') {
+                        //$("front_image img").attr("src","public/images/sun.png");
+                        $('.front_image').attr('src', 'data:image/png;base64,'+base64String);
+                        $('#image-list-0').data('src', 'data:image/png;base64,'+base64String);
+                    }
+                    
+                    if (actimageID == '1') {
+                        $('.back_image').attr('src', 'data:image/png;base64,'+base64String);
+                        $('#image-list-1').data('src', 'data:image/png;base64,'+base64String);
+                    }
+                    };
+                    reader.readAsDataURL(file12);
+
+                $('#need-to-replace-modal').dialog('close');
+                $file.val('');
+            } else {
+                window.alert('Please choose an image file.');
+            }
+        }else {
+            window.alert('Please choose an image file.');
+        }
+
+    });
+
+
     var $inputImage = $('#inputImage');
 
     if (URL) {
         $inputImage.change(function () {
+            //$('#need-to-replace-modal').dialog('close');
             var files = this.files;
             var file;
+            var actimageID = $image.data('id');
 
+            $('#xmark_' + actimageID).removeClass('active-image');
+            $('#xmark_' + actimageID).addClass('thumb-checkmark-img');
+            var okToPrint = false;
+            var needToReplace = false;
+            saveLocalStorage(actimageID, okToPrint, needToReplace);
             if (!$image.data('cropper')) {
                 return;
             }
@@ -356,9 +445,32 @@ $(function () {
                     if (uploadedImageURL) {
                         URL.revokeObjectURL(uploadedImageURL);
                     }
-
+                    var actimageID = actimageID.replace(/\D/g, "");
+                    //alert(res);
+                      const file12 = file;
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          var base64String = reader.result.replace('data:', '').replace(/^.+,/, '');
+                          localStorage.setItem('uploadedImageURL'+actimageID, 'data:image/png;base64,'+base64String);
+                          //document.body.style.background = `url(data:image/png;base64,${base64String})`;
+                        $image.cropper('destroy').attr('src', 'data:image/png;base64,'+base64String).cropper(options);
+                        if (actimageID == '0') {
+                            //$("front_image img").attr("src","public/images/sun.png");
+                            $('.front_image').attr('src', 'data:image/png;base64,'+base64String);
+                            $('#image-list-0').data('src', 'data:image/png;base64,'+base64String);
+                        }
+                        
+                        if (actimageID == '1') {
+                            $('.back_image').attr('src', 'data:image/png;base64,'+base64String);
+                            $('#image-list-1').data('src', 'data:image/png;base64,'+base64String);
+                        }
+                        };
+                        reader.readAsDataURL(file12);
+                   
                     uploadedImageURL = URL.createObjectURL(file);
-                    $image.cropper('destroy').attr('src', uploadedImageURL).cropper(options);
+                    //$image.cropper('destroy').attr('src', uploadedImageURL).cropper(options);
+
+                    
                     $inputImage.val('');
                 } else {
                     window.alert('Please choose an image file.');

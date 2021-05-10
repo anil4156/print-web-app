@@ -2,28 +2,30 @@
 @section('content')
     <div class="home-main">
         <div class="order-detail">
-            <div class="row align-items-center justify-content-between">
-                <div class="logo_div inner_">
+            <div class="row">
+                <div class="col-md-3">
                     <div class="header-logo">
-                            <!-- <h4><b>PrintVICE</b></h4> -->
-                            <h1 class="_mainlogo">D</h1>
-                            <h5 class="job_number">Job No: {{$order_detail['ordersid']}}</h5>
+                        <div class="pr-lg-3">
+                            <h4><b>PrintVICE</b></h4>
+                        </div>
+                        <div class="jobNoDetail">
+                            <div class=""><h6>Job No: {{$order_detail['ordersid']}}</h6></div>
+                        </div>
                     </div>
                 </div>
-                <a class="btn btn-primary" href="{{ URL::to('createPDF') }}">Export to PDF</a>
-                <div class="name_size inner_">
+                <div class="col-md-2">
                     <div class="jobNameDetail">
                         <div class="job-name"><h6>Job Name: {{$order_detail['jobname']}}</h6></div>
                         <div class="job-name"><h6>Run Size: -</h6></div>
                     </div>
                 </div>
-                <div class="color_spec inner_">
+                <div class="col-md-3">
                     <div class="description-detail">
                         <div class="color-spec"><h6>Color Spec: {{$order_detail['color']}}</h6></div>
                         <div class="description"><h6>Description: -</h6></div>
                     </div>
                 </div>
-                <div class="hi_wi inner_">
+                <div class="col-md-1">
                     <div class="size-detail">
                         <?php
                         $size = explode('x', $order_detail['size']);
@@ -32,7 +34,7 @@
                         <div class="item-height"><h6>Height: {{$size[1]}}</h6></div>
                     </div>
                 </div>
-                <div class="item inner_">
+                <div class="col-md-1">
                     <div class="item-detail">
                         <div class="item-view">
                             <h6>
@@ -44,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="preview inner_">
+                <div class="col-md-2">
                     <div class="preview-expiration-detail">
                         <div class="">
                             <h6>
@@ -57,12 +59,12 @@
             </div>
         </div>
         <div class="image-tools">
-            <div class="row justify-content-between">
-                <div class="docs-buttons">
+            <div class="row">
+                <div class="col-md-10 docs-buttons">
                     <!-- Rotate Template -->
-                    <div class="btn-group vert_land">
+                    <div class="btn-group">
                         <span class="tool-name">Orientation: </span>
-                        <button type="button" class="btn btn-primary vert" data-method="rotateTemplatePotrait"
+                        <button type="button" class="btn btn-primary" data-method="rotateTemplatePotrait"
                                 data-option="90"
                                 title="Rotate Template Potrait">
                             <span class="docs-tooltip" data-toggle="tooltip" data-animation="false"
@@ -71,7 +73,7 @@
                               <span class="fa-reacteurope"></span>
                             </span>
                         </button>
-                        <button type="button" class="btn btn-primary horz" data-method="rotateTemplateLandscape"
+                        <button type="button" class="btn btn-primary" data-method="rotateTemplateLandscape"
                                 data-option="0"
                                 title="Rotate Template Landscape">
                             <span class="docs-tooltip" data-toggle="tooltip" data-animation="false"
@@ -85,124 +87,102 @@
                     <!-- Rotate -->
                     <div class="btn-group">
                         <span class="tool-name">Rotate: </span>
-                        <button type="button" class="btn btn-primary rotate minus" data-method="rotate" data-option="-90"
+                        <button type="button" class="btn btn-primary" data-method="rotate" data-option="-90"
                                 title="Rotate Left">
-                                <img src="public/images/rotate_left.png">
+                            <span class="fa fa-undo-alt"></span>
                         </button>
-                        <button type="button" class="btn btn-primary rotate plus" data-method="rotate" data-option="90"
+                        <button type="button" class="btn btn-primary" data-method="rotate" data-option="90"
                                 title="Rotate Right">
-                                <img src="public/images/rotate_right.png">
+                            <span class="fa fa-redo-alt"></span>
                         </button>
                     </div>
 
                     <!-- Scale -->
-                    <div class="btn-group scale_me">
+                    <div class="btn-group">
                         <span class="tool-name">Scale: </span>
-                        <button type="button" class="btn btn-primary sc_up" data-method="zoomScale" data-option="0.2"
+                        <button type="button" class="btn btn-primary" data-method="zoomScale" data-option="0.2" data-method2="Scale"
                                 title="Scale Up">
                             <span class="fas fa-caret-up"></span><i class=""></i>
                         </button>
-                        <button type="button" class="btn btn-primary sc_down" data-method="zoomScale" data-option="-0.2"
+                        <button type="button" class="btn btn-primary" data-method="zoomScale" data-option="-0.2" data-method2="Scale"
                                 title="Scale Down">
                             <span class="fas fa-caret-down"></span>
-                        </button>
-                        <button type="button" id="actual_size" class="btn btn-primary scale_" data-method="zoom"
-                                title="Scale Down">
-                                <img src="public/images/scale.png">
                         </button>
                     </div>
 
                     <!-- Move -->
-                    <div class="btn-group move_prod">
+                    <div class="btn-group">
                         <span class="tool-name">Move: </span>
-                        <button type="button" class="btn btn-primary mv mv_left" data-method="move" data-option="-10"
+                        <button type="button" class="btn btn-primary" data-method="move" data-option="-10"
                                 data-second-option="0" title="Move Left">
                             <span class="fa fa-arrow-left"></span>
                         </button>
-                        <button type="button" class="btn btn-primary mv mv_right" data-method="move" data-option="10"
+                        <button type="button" class="btn btn-primary" data-method="move" data-option="10"
                                 data-second-option="0" title="Move Right">
                             <span class="fa fa-arrow-right"></span>
                         </button>
-                        <button type="button" class="btn btn-primary mv mv_up" data-method="move" data-option="0"
+                        <button type="button" class="btn btn-primary" data-method="move" data-option="0"
                                 data-second-option="-10" title="Move Up">
                             <span class="fa fa-arrow-up"></span>
                         </button>
-                        <button type="button" class="btn btn-primary mv mv_down" data-method="move" data-option="0"
+                        <button type="button" class="btn btn-primary" data-method="move" data-option="0"
                                 data-second-option="10" title="Move Down">
                             <span class="fa fa-arrow-down"></span>
                         </button>
-                        <button type="button" class="btn btn-primary lock disable-image" data-method="disable"
+                        <button type="button" class="btn btn-primary disable-image" data-method="disable"
                                 title="Disable">
-                                <img src="public/images/lock.png">
+                            <span class="fa fa-lock"></span>
                         </button>
-                        <button type="button" class="btn btn-primary mt-1 unlock enable-image" data-method="enable" title="Enable">
-                                <img src="public/images/unlocked.png">
+                        <button type="button" class="btn btn-primary enable-image" data-method="enable" title="Enable">
+                            <span class="fa fa-unlock"></span>
                         </button>
                     </div>
 
                     <!-- Preview -->
                     <div class="btn-group">
                         <span class="tool-name">Preview: </span>
-                        <button type="button" class="btn btn-primary" id="cut_image"
-                                title="Show cut_images">
-                                <img src="public/images/cut.png">
-                        </button>
                         <button type="button" class="btn btn-primary" id="3D_preview"
                                 title="Show 3D preview">
-                                <img src="public/images/3d.png">
+                            <span class=""> 3D </span>
                         </button>
-                        <button type="button" class="btn btn-primary zoom_in" data-method="zoom" data-option="0.1"
+                        <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.1"
                                 title="Zoom In">
-                                <img src="public/images/zoom.png">
+                            <span class="fa fa-search-plus"></span>
                         </button>
-                        <button type="button" class="btn btn-primary zoom_out" data-method="zoom" data-option="-0.1"
+                        <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1"
                                 title="Zoom Out">
-                                <img src="public/images/zoom-out.png">
+                            <span class="fa fa-search-minus"></span>
                         </button>
                     </div>
 
                     <!-- Other -->
                     <div class="btn-group">
                         <span class="tool-name">Other: </span>
-                        <button type="button" class="btn btn-primary refresh" data-method="reset" title="Reset">
-                                <img src="public/images/refresh.png">
+                        <button type="button" class="btn btn-primary" data-method="reset" title="Reset">
+                            <span class="fa fa-sync-alt"></span>
                         </button>
-                        <button type="button" class="btn btn-primary undo" id="undoButton" data-method="undo"
+                        <button type="button" class="btn btn-primary" id="undoButton" data-method="undo"
                                 title="Undo" disabled="true">
-                                <img src="public/images/undo.png">
+                            <span class="fa fa-undo-alt"></span>
                         </button>
-                        <button type="button" class="btn btn-primary redo" id="redoButton" data-method="redo"
+                        <button type="button" class="btn btn-primary" id="redoButton" data-method="redo"
                                 title="Redo" disabled="true">
-                                <img src="public/images/redo.png">
-                        </button>
-                        <button type="button" class="btn btn-primary question" id="InfoButton" data-method="info"
-                                title="info">
-                                <img src="public/images/que.png">
-                        </button>
-                        <button type="button" class="btn btn-primary square" id="squareButton" data-method="square"
-                                title="" >
-                                <img src="public/images/sq.png">
+                            <span class="fa fa-redo-alt"></span>
                         </button>
                     </div>
                 </div>
-                <div class="text-md-right action_menus">
+                <div class="col-md-2">
                     <!--  Action -->
-                    <div class="btn-group mr-0 action_btns">
-                        <!-- <span class="tool-name">Action: </span> -->
-                        <!-- <button type="button" class="btn btn-primary" id="proceed_to_finish" title="Proceed to Finish">
-                            <img src="public/images/ok.png">
-                        </button> -->
-                        
-                        <button type="button" class="btn btn-primary act print" id="ok_to_print" title="Ok to Print">
-                            <!-- <img src="public/images/print.png"> -->
-                            ok to print
+                    <div class="btn-group">
+                        <span class="tool-name">Action: </span>
+                        <button type="button" class="btn btn-primary" id="proceed_to_finish" title="Proceed to Finish">
+                            <span class="fas fa-check"></span>
                         </button>
-                        <button type="button" class="btn btn-primary act replace" id="need_to_replace" title="Need to Replace">
-                            <!-- <img src="public/images/edit.png"> -->
-                            Need to Replace
+                        <button type="button" class="btn btn-primary" id="need_to_replace" title="Need to Replace">
+                            <span class="fas fa-edit"></span>
                         </button>
-                        <button type="button" class="btn btn-primary change_mode" id="change_theme" title="Change Theme">
-                            <img class="change_mode_img" src="public/images/moon.png">
+                        <button type="button" class="btn btn-primary" id="ok_to_print" title="Ok to Print">
+                            <span class="fas fa-print"></span>
                         </button>
                     </div>
                 </div>
@@ -210,11 +190,9 @@
         </div>
         <div class="preview-and-image-area">
             <div class="row">
-                <div class="preview-area-left">
-                    
+                <div class="col-md-2 preview-area-left">
+                    <h3 class="colheader">Preview Area</h3>
                     <div class="img-container image-list-div previewthumbs">
-                        <h3 class="colheader mb-4">Preview Area</h3>
-                        <div class="images_holder_wrapper">
                         @if(isset($order_detail['images']) && !empty($order_detail['images']))
                             @foreach($order_detail['images'] as $key => $image)
                                 <div class="thumbItem image_list {{$image['isCymk'] == 1 ? 'cymk_images' : ''}}"
@@ -234,25 +212,18 @@
                                 </div>
                             @endforeach
                         @endif
-                        </div>
                     </div>
                 </div>
-                <div class="preview-area-right">
-                    <div class="mobile_for">
-                        <div class="ruler"></div>
-                        <div class="ruler vertical"></div>
-                        <div class="img-container canvasImage" id="canvasImageDiv">
-                            <div class="boxes-holder">
-                                <div class="container_wrapper" >
-                            @if(isset($order_detail['images']) && !empty($order_detail['images']))
-                                <img id="image" src="{{$order_detail['images'][0]['file']}}" class="">
-                            @endif
-                                </div>
-                            </div>
+                <div class="col-md-10 preview-area-right">
+                    <div class="img-container canvasImage" id="canvasImageDiv">
+                        <div class="boxes-holder">
+                        @if(isset($order_detail['images']) && !empty($order_detail['images']))
+                            <img id="image" src="{{$order_detail['images'][0]['file']}}" class="">
+                        @endif
                         </div>
-                        <div id="cymkErrorDiv" style="display: none;">
-                            <p>Image is not CYMK.</p>
-                        </div>
+                    </div>
+                    <div id="cymkErrorDiv" style="display: none;">
+                        <p>Image is not CYMK.</p>
                     </div>
                 </div>
             </div>
@@ -275,46 +246,17 @@
             </ul>
             <h5>If the job is production ready, click the "Send to Production" button below.</h5> -->
         </div>
-        <div id="help_modal_dialog">
-            <ol class="rectangle-list">
-                <li><div>Modals are built with HTML, CSS, and JavaScript.</div></li>
-                <li><div>Modals use position: fixed, which can sometimes be a bit particular about its rendering. Whenever possible, place your modal HTML in a top-level position to avoid potential interference from other elements. You’ll likely run into issues when nesting a .modal within another fixed element.</div></li>
-                <li><div>Clicking on the modal “backdrop” will automatically close the modal.</div></li>
-                <li><div>Bootstrap only supports one modal window at a time. Nested modals aren’t supported as we believe them to be poor user experiences.</div></li>
-                <li><div>Before getting started with Bootstrap’s modal component, be sure to read the following as our menu options have recently changed.</div></li>
-            </ol>
-        </div>
-        <div id="time-expiration-modal">
-            <h5>DO YOU NEED MORE TIME TO PROOF YOUR PRINT FILES?</h5>
-        </div>
-
-        <div id="need-to-replace-modal" class="">
-            <h5 class="mt-2">Need to replace new files</h5>
-            <form enctype="multipart/form-data">
-                <div class="head"><button class="btn"><h4 id="item-replace-view-value"></h4></button>
-                <input name="file" id="file" type="file" /> </div>
-                <button type="button" class="btn btn-primary my-3 btn-danger mr-2" id="replace_yes" title="YES">YES</button>
-            <button type="button" class="btn btn-primary my-3 btn-success" id="replace_no" title="No">NO</button>
-            </form>
-            <!-- <label class="btn btn-primary btn-upload my-3 mr-3 btn-danger" for="inputImage" title="Upload image file">
-                <input type="file" class="sr-only" id="inputImage" name="file" accept="image/*">
-                <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="Import image with Blob URLs">
-                  YES
-                </span>
-            </label> -->
-            
-        </div>
     </div>
     <!-- The 3D Preview Modal -->
-    <div class="modal fade modal_showing_3d" id="3DPreviewModal">
-        <div class="modal-dialog">
+    <div class="modal fade" id="3DPreviewModal">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <!-- Modal body -->
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <div id="threeDconfirmwrapper">
                         <h4>Dear Customer:</h4>
-                        <!-- <p>Use this 3D preview to confirm that artwork is oriented correctly on both sides. If
+                        <p>Use this 3D preview to confirm that artwork is oriented correctly on both sides. If
                             everything looks good, please check the box below. If there is an issue close this window
                             and rotate the artwork until it is correct.</p>
                         <form id="confirm3Dform">
@@ -322,44 +264,41 @@
                                 <input class="confirm3d-checkbox" type="checkbox" name="checkbox_3d" id="checkbox_3d">
                                 <span class="checkbox-label">Orientation is correct.</span>
                             </div>
-                        </form> -->
+                        </form>
 
                         <p><strong>Please Note: </strong>This 3D preview is only for verifying rotation. Colors on the
                             screen do not reflect the colors of the printed product.</p>
-                        
-                            <div class="card_outer_wrpper">
-                                <div class="cardWrapper">
-                                    <div class="row justify-content-lg-center">
-                                        <div class="card image_3dim ">
-                                            <div class="cardFace front">
-                                                <img
-                                                    src="{{isset($order_detail['images'][0]['file']) ? $order_detail['images'][0]['file'] : ''}}">
-                                            </div>
-                                            <div class="cardFace back">
-                                                <img
-                                                    src="{{isset($order_detail['images'][1]['file']) ? $order_detail['images'][1]['file'] : ''}}">
-                                            </div>
-
-                                        </div>
-                                        <div class="rotation-slider">
-                                            <div id="vertical-rotation">
-                                                <input type="text" id="vertical-amount"
-                                                       style="border:0; color:#f6931f; font-weight:bold;visibility: hidden;">
-                                                <div id="vertical-slider"></div>
-                                            </div>
-                                        </div>
+                        <div class="cardWrapper">
+                            <div class="row">
+                                <div class="card col-md-10">
+                                    <div class="cardFace front">
+                                        <img
+                                            src="{{isset($order_detail['images'][0]['file']) ? $order_detail['images'][0]['file'] : ''}}">
                                     </div>
-                                    <div class="row mt-0">
-                                        <div class="">
-                                            <div id="horizontal-rotation">
-                                                <input type="text" id="horizontal-amount"
-                                                       style="border:0; color:#f6931f; font-weight:bold;visibility: hidden;">
-                                                <div id="horizontal-slider"></div>
-                                            </div>
-                                        </div>
+                                    <div class="cardFace back">
+                                        <img
+                                            src="{{isset($order_detail['images'][1]['file']) ? $order_detail['images'][1]['file'] : ''}}">
+                                    </div>
+
+                                </div>
+                                <div class="rotation-slider col-md-2">
+                                    <div id="vertical-rotation">
+                                        <input type="text" id="vertical-amount"
+                                               style="border:0; color:#f6931f; font-weight:bold;visibility: hidden;">
+                                        <div id="vertical-slider"></div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div id="horizontal-rotation">
+                                        <input type="text" id="horizontal-amount"
+                                               style="border:0; color:#f6931f; font-weight:bold;visibility: hidden;">
+                                        <div id="horizontal-slider"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -401,7 +340,7 @@
 
                 // change item view in header
                 $('#item-view-value').text($(this).data('image_view'));
-                $('#item-replace-view-value').text($(this).data('image_view'));
+
                 if ($(this).data('cymk') == 1) {
 
                     var optionData = null;
@@ -463,26 +402,7 @@
                     };
                     $('#canvasImageDiv').show();
                     $('#cymkErrorDiv').hide();
-                    
-
-                    if (localStorage.getItem('uploadedImageURL'+imageID) != null) {
-                        var dataImage = localStorage.getItem('uploadedImageURL'+imageID);
-                        //console.log("99999999999",dataImage);
-                        $('#image').cropper('destroy').attr('src', dataImage).cropper(options);
-                        if (imageID == '0') {
-                            //$("front_image img").attr("src","public/images/sun.png");
-                            $('.front_image').attr('src', dataImage);
-                            $('#image-list-0').data('src', dataImage);
-                        }
-                        
-                        if (imageID == '1') {
-                            $('.back_image').attr('src', dataImage);
-                            $('#image-list-1').data('src', dataImage);
-                        }
-                    }else{
-                        $('#image').cropper('destroy').attr('src', $(this).data('src')).cropper(options);
-                    }
-                    
+                    $('#image').cropper('destroy').attr('src', $(this).data('src')).cropper(options);
                 } else {
                     $('#canvasImageDiv').hide();
                     $('#cymkErrorDiv').show();
@@ -563,64 +483,9 @@
                 position: {my: 'top', at: 'top+150'},
                 buttons: {
                     "OK": function () {
-                        var page = "vasant"
-                        fetch_data(page);
                         //$(this).dialog("close");
                         //$('#3D_preview').trigger('click');
 
-                    }
-                }
-            });
-
-            // proceed to finish dialog
-            $('#help_modal_dialog').dialog({
-                title: "Help",
-                resizable: false,
-                autoOpen: false,
-                height: "auto",
-                width: 800,
-                modal: true,
-                draggable: false,
-                position: {my: 'top', at: 'top+150'},
-                buttons: {
-                    "OK": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-
-             // ready to print modal popup
-            $('#time-expiration-modal').dialog({
-                title: "Dear Customer:",
-                resizable: false,
-                autoOpen: false,
-                height: "auto",
-                width: 400,
-                modal: true,
-                draggable: false,
-                close: function( event, ui ) {
-                    $('#expiration_time').html('00:00:00');
-                    localStorage.clear();
-                    $('#image').cropper('reset');
-                    location.reload();
-                   },
-                position: {my: 'top', at: 'top+150'},
-                buttons: {
-                    "YES": function () {
-                        localStorage.removeItem('countDownDate');
-                        localStorage.removeItem('minuteCount');
-                        localStorage.removeItem('secondCount');
-                        location.reload();
-                        //$(this).dialog("close");
-                        //$('#3D_preview').trigger('click');
-
-                    },
-                    "NO": function () {
-                        alert('This Session is no longer available');
-                        $('#expiration_time').html('00:00:00');
-                        localStorage.clear();
-                        $('#image').cropper('reset');
-                        location.reload();
                     }
                 }
             });
@@ -654,10 +519,6 @@
                 }
             });
 
-            //Help Modal
-            $('#InfoButton').click(function () {
-                $('#help_modal_dialog').dialog('open');
-            });
             // display 30 min counter
             var minute = parseInt(30);
             if (localStorage.getItem('countDownDate') == null) {
@@ -706,11 +567,9 @@
                 if (distance < 0) {
                     clearInterval(x);
                     $('#expiration_time').html('00:00:00');
-                    $('#time-expiration-modal').dialog('open');
-                    //$('#expiration_time').html('00:00:00');
-                    // localStorage.clear();
-                    // $('#image').cropper('reset');
-                    // location.reload();
+                    localStorage.clear();
+                    $('#image').cropper('reset');
+                    location.reload();
                 }
             }, 1000);
         });
@@ -743,7 +602,7 @@
                         duration: 1.2,
                         rotationX: str1,
                         rotationY: ui.value,
-                        //transformOrigin: "95px 95px",
+                        transformOrigin: "95px 95px",
                         ease: Back.easeOut
                     });
                 }
@@ -774,181 +633,12 @@
                         duration: 1,
                         rotationY: str,
                         rotationX: ui.value,
-                        //transformOrigin: "95px 95px",
+                        transformOrigin: "95px 95px",
                         ease: Back.easeOut
                     });
                 }
             });
         });
-
-
-        // $(document).ready(function(){
-        //     $('button.change_mode').click(function(){
-        //         $(this).children('img').attr('src', 'public/images/sun.png');
-        //     })
-        // })
-
-        $(document).ready(function(){
-          var flag = 0;  
-          $("button.change_mode").click(function(){
-            if(flag == 0) {
-              $("button.change_mode img").attr("src","public/images/sun.png");
-              flag = 1;
-            }
-            else if(flag == 1) {
-              $("button.change_mode img").attr("src","public/images/moon.png");
-              flag = 0;
-            }
-          });
-        }); 
-
-
-        $(document).ready(function(){
-          var flag = 0;  
-          $("button.lock.disable-image").click(function(){
-            if(flag == 0) {
-              $("button.lock.disable-image img").attr("src","public/images/unlocked.png");
-              flag = 1;
-            }
-            else if(flag == 1) {
-              $("button.lock.disable-image img").attr("src","public/images/lock.png");
-              flag = 0;
-            }
-          });
-        }); 
-
-        $(document).ready(function(){
-          var flag = 0;  
-          $("button.change_mode").click(function(){
-            if(flag == 0) {
-              $("button.rotate.minus img").attr("src","public/images/dark_rotate_minus.png");
-              $("button.rotate.plus img").attr("src","public/images/dark_rotate_plus.png");
-              $("button.scale_ img").attr("src","public/images/dark_scale.png");
-              $("button.lock.disable-image img").attr("src","public/images/dark_lock.png");
-              $("#cut_image img").attr("src","public/images/dark_cut.png");
-              $("#3D_preview img").attr("src","public/images/dark_3d.png");
-              $("button.zoom_in img").attr("src","public/images/dark_zoom.png");
-              $("button.zoom_out img").attr("src","public/images/dark_zoom_out.png");
-              $("button.refresh img").attr("src","public/images/dark_refresh.png");
-              $("button.undo img").attr("src","public/images/dark_undo.png");
-              $("button.redo img").attr("src","public/images/dark_redo.png");
-              $("button.question img").attr("src","public/images/dark_que.png");
-              $("button.square img").attr("src","public/images/dark_sq.png");
-              $("#proceed_to_finish img").attr("src","public/images/dark_ok.png");
-              $('div.ui-dialog.ui-corner-all.ui-widget').addClass('dark_mode')
-              flag = 1;
-            }
-            else if(flag == 1) {
-              $("button.rotate.minus img").attr("src","public/images/rotate_left.png");
-              $("button.rotate.plus img").attr("src","public/images/rotate_right.png");
-              $("button.scale_ img").attr("src","public/images/scale.png");
-              $("button.lock.disable-image img").attr("src","public/images/lock.png");
-              $("#cut_image img").attr("src","public/images/cut.png");
-              $("#3D_preview img").attr("src","public/images/3d.png");
-              $("button.zoom_in img").attr("src","public/images/zoom.png");
-              $("button.zoom_out img").attr("src","public/images/zoom-out.png");
-              $("button.refresh img").attr("src","public/images/refresh.png");
-              $("button.undo img").attr("src","public/images/undo.png");
-              $("button.redo img").attr("src","public/images/redo.png");
-              $("button.question img").attr("src","public/images/que.png");
-              $("button.square img").attr("src","public/images/sq.png");
-              $("#proceed_to_finish img").attr("src","public/images/ok.png");
-              $('div.ui-dialog.ui-corner-all.ui-widget').removeClass('dark_mode')
-
-              flag = 0;
-            }
-          });
-        }); 
-
-        $('button.change_mode').click(function() {
-          $('div.home-main').toggleClass('dark_mode');
-        });
-
-        function createRuler() {
-        var $ruler = $('.ruler');
-        for (var i = 0, step = 0; i < $ruler.innerWidth() / 5; i++, step++) {
-            var $tick = $('<div>');
-            if (step == 0) {
-                $tick.addClass('tickLabel').html(i * 5) ;
-            } else if ([1, 3, 5, 7, 9].indexOf(step) > -1) {
-                $tick.addClass('tickMinor');
-                if (step == 9) {
-                    step = -1;
-                }
-            } else {
-                $tick.addClass('tickMajor');
-            }
-            $ruler.append($tick);
-        }
-        }
-
-        $(window).on('load resize', function() {
-            $('.ruler').empty();
-                createRuler(); 
-        });
-
-        $('button#cut_image').click(function(){
-            $('.home-main .preview-and-image-area .preview-area-right .boxes-holder .cropper-modal, .home-main .preview-and-image-area .preview-area-right .boxes-holder .cropper-container.cropper-bg').toggleClass('show_cut');
-        })
-
-        $('button#squareButton').click(function(){
-            $('.home-main .preview-and-image-area .preview-area-right .boxes-holder .cropper-container.cropper-bg').toggleClass('show_cut');
-            $('.home-main .preview-and-image-area .preview-area-right .boxes-holder .cropper-view-box, .home-main .preview-and-image-area .preview-area-right .boxes-holder .cropper-modal, .cropper-dashed').toggleClass('show_sq');
-        })
-
-        $('button#actual_size').click(function(){
-            $('.home-main .preview-and-image-area .preview-area-right .boxes-holder .cropper-container.cropper-bg').toggleClass('show_cut');
-            $('.home-main .preview-and-image-area .preview-area-right .boxes-holder .cropper-view-box, .home-main .preview-and-image-area .preview-area-right .boxes-holder .cropper-modal, .cropper-dashed').toggleClass('show_sq');
-        })
-
-
-
-
-        function fetch_data(page)
-        {
-            $.ajaxSetup({
-            headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            var url = '{{ route("createPDF") }}';
-            //var data = '';
-            var images = JSON.parse(localStorage.getItem('images'));
-            var previewImages = [];
-            // if (images != null) {
-            //     for (var k in images) {
-            //         var image = images[k];
-            //         previewImages.push(image.canvasImageData);
-            //     }
-            // }
-            // if (previewImages.length != 0) {
-            //     $(".cardWrapper .front img").prop('src', previewImages[0]);
-            //     $(".cardWrapper .back img").prop('src', previewImages[1]);
-            // }
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: images,
-                // xhrFields: {
-                //     responseType: 'blob'
-                // },
-                success: function(response){
-                    console.log(response);
-                    window.open(response, '_blank');
-                    $('#ready-to-print-modal').dialog('close');
-                //     var blob = new Blob([response]);
-                //     var link = document.createElement('a');
-                //     link.href = window.URL.createObjectURL(blob);
-                //     link.download = "Sample.pdf";
-                //     link.click();
-               },
-                error: function(blob){
-                    console.log(blob);
-                }
-            });
-        }
-
-
     </script>
 @endsection
 

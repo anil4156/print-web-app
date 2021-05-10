@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,3 +18,7 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::any('/', 'HomeController@index')->name('website.home');
+
+//Route::get('/employee/pdf', [HomeController::class, 'createPDF']);
+
+Route::post('createPDF', 'HomeController@createPDF')->name('createPDF');

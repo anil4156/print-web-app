@@ -2713,6 +2713,8 @@
         ,
         // Enable (unfreeze) the cropper
         enable: function enable() {
+            $(".enable-image").hide();
+            $(".disable-image").show();
             if (this.ready && this.disabled) {
                 this.disabled = false;
                 removeClass(this.cropper, CLASS_DISABLED);
@@ -2723,6 +2725,8 @@
         ,
         // Disable (freeze) the cropper
         disable: function disable() {
+            $(".disable-image").hide();
+            $(".enable-image").show();
             if (this.ready && !this.disabled) {
                 this.disabled = true;
                 addClass(this.cropper, CLASS_DISABLED);
